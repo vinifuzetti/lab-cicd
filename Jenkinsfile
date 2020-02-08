@@ -11,7 +11,7 @@ pipeline {
 			   archiveArtifacts 'target/*.jar'
             }
         }
-    }
+    	}
 	post {
 		success {
 			githubNotify status: "SUCCESS", 
