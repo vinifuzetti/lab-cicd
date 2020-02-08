@@ -14,5 +14,6 @@ pipeline {
 	    stage('Upload') {
 		    sh 'echo "***Upload para Nexus***"'
 	    }
+	    
     }
 }
