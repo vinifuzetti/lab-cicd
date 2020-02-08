@@ -1,27 +1,32 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'maven-3.6.3'
-        jdk 'jdk-8'
-    }
-
     stages {
-        stage('Stop') {
-            steps {
-               sh 'docker-compose down || true'
-            }
-        }
         stage('Build') {
+			agent {
+                docker { image 'maven:3-alpine' }
+            }
             steps {
                sh 'mvn -B -DskipTests clean package'
-               sh 'docker-compose build'
+			   archiveArtifacts 'target/*.jar'
             }
         }
-        stage('Deploy') {
-            steps {
-               sh 'docker-compose start'
-            }
+    }
+	post {
+		success {
+			githubNotify status: "SUCCESS", 
+						 credentialsId: "github", 
+						 account: "prof-eduardo-galego", 
+						 repo: "lab-cicd",
+						 description: "Sucesso"
+						 
+        }
+        failure {
+            githubNotify status: "FAILURE", 
+						 credentialsId: "github", 
+						 account: "prof-eduardo-galego", 
+						 repo: "lab-cicd",
+						 description: "Erro"
         }
     }
 }
