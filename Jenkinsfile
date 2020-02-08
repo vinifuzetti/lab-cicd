@@ -11,22 +11,8 @@ pipeline {
 			   archiveArtifacts 'target/*.jar'
             }
         }
-    	}
-	post {
-		success {
-			githubNotify status: "SUCCESS", 
-						 credentialsId: "vinigit", 
-						 account: "vinifuzetti", 
-						 repo: "lab-cicd",
-						 description: "Sucesso"
-						 
-        }
-        failure {
-            githubNotify status: "FAILURE", 
-						 credentialsId: "vinigit", 
-						 account: "vinifuzetti", 
-						 repo: "lab-cicd",
-						 description: "Erro"
-        }
+	    stage('Upload') {
+		    sh 'echo "***Upload para Nexus***"'
+	    }
     }
 }
